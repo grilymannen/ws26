@@ -1,7 +1,7 @@
 import { form, getRequestEvent } from '$app/server';
 import { pdb } from '#lib/prisma/db.ts';
 import { authSchema } from '#lib/schema.ts';
-import { hashPassword, verifyPassword } from '#lib/password.ts';
+import { hashPassword, verifyPassword } from '#lib/server/password.ts';
 import {
 	ACCESS_COOKIE,
 	ACCESS_TTL_S,
@@ -9,7 +9,7 @@ import {
 	REFRESH_COOKIE,
 	REFRESH_TTL_S
 } from '#lib/constants.ts';
-import { createToken } from '#lib/jwt.ts';
+import { createToken } from '#lib/server/jwt.ts';
 import { redirect } from '@sveltejs/kit';
 import type { AccessCookieData } from '#lib/types.ts';
 
@@ -51,13 +51,14 @@ export const login = form(authSchema, async ({ name, pass }) => {
 
 	const { cookies } = getRequestEvent();
 
-	const expires = Temporal.Now.instant().add({ hours: seconds });
+	const expires = Temporal.Now.instant().add({ seconds });
 	const refreshToken = await pdb.RefreshToken.create({ expires, userid: user.id });
 
 	const accesscookiedata = {
 		id: user.id,
 		name: user.name,
-		created_at: user.created_at
+		created_at: user.created_at,
+		avatarurl: user.avatarurl
 	};
 
 	cookies.set(REFRESH_COOKIE, await createToken<string>(refreshToken.id, `${REFRESH_TTL_S}s`), {

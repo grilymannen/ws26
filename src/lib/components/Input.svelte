@@ -1,32 +1,32 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements';
 
-	type Props = HTMLInputAttributes & {
-		class?: string;
-		maxlength?: number | null;
-		oninput?: ((event: Event) => void) | null;
-	};
+	type Props = Omit<HTMLInputAttributes, 'class'> & { class?: string };
 
-	let { class: className = '', maxlength = null, oninput = null, ...props }: Props = $props();
+	let {
+		value = $bindable(''),
+		class: className = '',
+		maxlength,
+		autocomplete = 'off',
+		...rest
+	}: Props = $props();
 
-	let value = $state('');
-
-	const useMaxLength = $derived(maxlength != null && maxlength > 0);
+	const showCounter = $derived(maxlength != null && maxlength > 0);
 </script>
 
-<div class={`${className} relative flex items-center justify-end`}>
+<div class="relative flex items-center {className}">
 	<input
-		{...props}
+		{...rest}
 		bind:value
-		maxlength={maxlength ?? undefined}
-		{oninput}
-		class="w-full rounded border border-gray-300 px-3 py-2 outline-none focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-black/5"
-		autocomplete="off"
+		{maxlength}
+		{autocomplete}
+		class="w-full rounded-md border border-neutral-300 px-3 py-2 outline-none
+			focus:border-neutral-900 disabled:cursor-not-allowed disabled:bg-black/5
+			{showCounter ? 'pr-14' : ''}"
 	/>
-
-	{#if useMaxLength}
-		<p class="absolute p-2 text-gray-500">
-			{value.length}/{maxlength}
-		</p>
+	{#if showCounter}
+		<span aria-hidden="true" class="pointer-events-none absolute right-3 text-xs text-neutral-500">
+			{String(value ?? '').length}/{maxlength}
+		</span>
 	{/if}
 </div>

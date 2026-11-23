@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { readToken, createToken } from '#lib/jwt.ts';
+import { readToken, createToken } from '#lib/server/jwt.ts';
 import type { LayoutServerLoad } from './$types';
 import {
 	ACCESS_COOKIE,
@@ -9,9 +9,12 @@ import {
 	COOKIE_OPTIONS
 } from '#lib/constants.ts';
 import { pdb } from '#lib/prisma/db.ts';
-import type { AccessCookieData } from '#lib/types.ts';
+import type { AccessCookieData, UserData } from '#lib/types.ts';
 
-export const load: LayoutServerLoad = async ({ cookies, url }) => {
+export const load: LayoutServerLoad = async ({
+	cookies,
+	url
+}): Promise<{ user: null | UserData }> => {
 	const isProtected = url.pathname !== AUTH_PATH;
 
 	const refreshToken = cookies.get(REFRESH_COOKIE);
@@ -28,7 +31,9 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 	const accesscookiedata = await readToken<AccessCookieData>(accessToken);
 
 	if (accesscookiedata) {
-		return { user: accesscookiedata };
+		return {
+			user: { ...accesscookiedata, created_at: Temporal.Instant.from(accesscookiedata.created_at) }
+		};
 	}
 
 	const dbToken = await pdb.RefreshToken.include('user').first({ id: refreshid });
@@ -46,13 +51,14 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
 		// without hash
 		id: dbToken.userid,
 		name: dbToken.user.name,
-		created_at: dbToken.user.created_at
+		created_at: dbToken.user.created_at,
+		avatarurl: dbToken.user.avatarurl
 	};
 
 	cookies.set(
 		ACCESS_COOKIE,
 		await createToken<AccessCookieData>(
-			{ id: user.id, name: user.name, created_at: user.created_at.toString() },
+			{ ...user, created_at: user.created_at.toString() },
 			`${ACCESS_TTL_S}s`
 		),
 		{ maxAge: ACCESS_TTL_S, ...COOKIE_OPTIONS }

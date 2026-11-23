@@ -14,7 +14,7 @@
 		<Button variant="ghost">Recent</Button>
 	</div>
 	<h2 class="mt-2 text-xl font-semibold">Rooms</h2>
-	<div class="flex flex-col gap-2 p-4">
+	<div class="flex max-h-120 flex-col gap-2 overflow-y-scroll p-4">
 		{#each await getAllForums() as room (room.id)}
 			<a href="app/{room.id}" class="block rounded border border-gray-300">
 				<p class="p-2">{room.text}</p>

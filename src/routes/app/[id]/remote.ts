@@ -13,12 +13,12 @@ export const getForum = query(stringSchema, async (id) => {
 
 export const getMessages = query.live(stringSchema, async function* (forumid) {
 	yield await pdb.Message.where({ forumid })
-		.include('user', (user) => user.select('id', 'name', 'created_at'))
+		.include('user', (user) => user.select('id', 'name', 'created_at', 'avatarurl'))
 		.all();
 
 	for await (const _ of on(emitter, forumid)) {
 		yield await pdb.Message.where({ forumid })
-			.include('user', (user) => user.select('id', 'name', 'created_at'))
+			.include('user', (user) => user.select('id', 'name', 'created_at', 'avatarurl'))
 			.all();
 	}
 });

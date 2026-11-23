@@ -15,6 +15,7 @@ model User {
     messages        Message[]
     refreshtokens   RefreshToken[]
     created_at      DateTime(as: temporal)   @default(now())
+    avatarurl       String?
 }
 
 model Forum {

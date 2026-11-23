@@ -1,24 +1,14 @@
 <script lang="ts">
 	import './layout.css';
-	import 'tippy.js/dist/tippy.css';
-	import 'tippy.js/themes/light-border.css';
-	import tippy from 'tippy.js';
-	import { goto } from '$app/navigation';
-	import type { LayoutProps } from './$types';
-	import type { Attachment } from 'svelte/attachments';
 
-	function tooltip(content: string): Attachment {
-		return (element) => {
-			const tooltip = tippy(element, { content, theme: 'light-border' });
-			return tooltip.destroy;
-		};
-	}
+	import type { LayoutProps } from './$types';
+	import { tooltip } from '#lib/util/tooltip.ts';
 
 	import { Page, Button } from '#lib/components.ts';
 	import { House, Lock, LogOut, MessageCircle, User } from '@lucide/svelte';
-	import { logout } from './remote';
+	import { logout } from '#lib/logout.ts';
 
-	let { children, data }: LayoutProps = $props();
+	let { children, data, params }: LayoutProps = $props();
 	let user = $derived(data.user);
 </script>
 
@@ -38,22 +28,21 @@
 			<Lock />
 		</Button>
 	</a>
-	<Button variant="secondary" onclick={() => console.log(data.user)} {@attach tooltip('Log user')}>
-		<User />
-		{#if user}
-			Logged in as: <span class="font-semibold">{user.name}</span>
-		{:else}
-			Not logged in
-		{/if}
-	</Button>
-	<Button
-		variant="secondary"
-		{@attach tooltip('Log out')}
-		onclick={async () => {
-			await logout();
-			goto('/auth');
-		}}
-	>
+	<a href="/account">
+		<Button variant="secondary" {@attach tooltip('Account')}>
+			<User />
+			{#if user}
+				Logged in as: <span class="font-semibold">{user.name}</span><img
+					class="size-6 rounded-full"
+					src={user?.avatarurl}
+					alt={user.name}
+				/>
+			{:else}
+				Not logged in
+			{/if}
+		</Button>
+	</a>
+	<Button variant="secondary" {@attach tooltip('Log out')} onclick={logout}>
 		<LogOut />
 	</Button>
 </nav>

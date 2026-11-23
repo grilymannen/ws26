@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-	StorageHashBase<'ac4d51c992705b4531e11b5b62f17c41225b31f470eada588eeab2f49613dd1e'>;
+	StorageHashBase<'cc5564802f052f2fc5afce0ac1e18eb6ed5fc5a237ea87fac30d265b05b3a502'>;
 export type ExecutionHash =
 	ExecutionHashBase<'5057b062945421e190f36a11644ec548e710d5da6c83864459258c8ed71e0526'>;
 export type ProfileHash =
@@ -345,6 +345,7 @@ export namespace Models {
 		readonly [RelationKeys]?: 'user';
 	};
 	export type public_User = {
+		avatarurl: FieldOutputTypes['public']['User']['avatarurl'];
 		created_at: FieldOutputTypes['public']['User']['created_at'];
 		hash: FieldOutputTypes['public']['User']['hash'];
 		id: FieldOutputTypes['public']['User']['id'];
@@ -624,6 +625,12 @@ type ContractBase = Omit<
 						};
 						readonly User: {
 							columns: {
+								readonly avatarurl: {
+									readonly dataType: 'pg/text';
+									readonly codecId: 'pg/text@1';
+									readonly nullable: true;
+									readonly many: false;
+								};
 								readonly created_at: {
 									readonly dataType: 'pg/timestamptz';
 									readonly codecId: 'pg/timestamptz-temporal@1';
@@ -885,6 +892,10 @@ type ContractBase = Omit<
 					};
 					readonly User: {
 						readonly fields: {
+							readonly avatarurl: {
+								readonly nullable: true;
+								readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+							};
 							readonly created_at: {
 								readonly nullable: false;
 								readonly type: {
@@ -933,6 +944,7 @@ type ContractBase = Omit<
 							readonly table: 'User';
 							readonly namespaceId: 'public';
 							readonly fields: {
+								readonly avatarurl: { readonly column: 'avatarurl' };
 								readonly created_at: { readonly column: 'created_at' };
 								readonly hash: { readonly column: 'hash' };
 								readonly id: { readonly column: 'id' };
