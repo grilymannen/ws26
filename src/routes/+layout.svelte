@@ -2,7 +2,7 @@
 	import './layout.css';
 
 	import type { LayoutProps } from './$types';
-	import { tooltip } from '#lib/util/tooltip.ts';
+	import { tooltipper } from '#lib/util/tooltip.ts';
 
 	import { Page, Button } from '#lib/components.ts';
 	import { House, Lock, LogOut, MessageCircle, User } from '@lucide/svelte';
@@ -13,23 +13,23 @@
 </script>
 
 <nav class="flex gap-2 p-2">
-	<a href="/" {@attach tooltip('Home')}>
+	<a href="/" {@attach tooltipper('Home')}>
 		<Button variant="secondary">
 			<House />
 		</Button>
 	</a>
-	<a href="/app" {@attach tooltip('App')}>
+	<a href="/app" {@attach tooltipper('App')}>
 		<Button variant="secondary">
 			<MessageCircle />
 		</Button>
 	</a>
-	<a href="/auth" {@attach tooltip('Auth')}>
+	<a href="/auth" {@attach tooltipper('Auth')}>
 		<Button variant="secondary">
 			<Lock />
 		</Button>
 	</a>
 	<a href="/account">
-		<Button variant="secondary" {@attach tooltip('Account')}>
+		<Button variant="secondary" {@attach tooltipper('Account')}>
 			<User />
 			{#if user}
 				Logged in as: <span class="font-semibold">{user.name}</span><img
@@ -42,10 +42,13 @@
 			{/if}
 		</Button>
 	</a>
-	<Button variant="secondary" {@attach tooltip('Log out')} onclick={logout}>
+	<Button variant="secondary" {@attach tooltipper('Log out')} onclick={logout}>
 		<LogOut />
 	</Button>
 </nav>
 <Page>
 	{@render children()}
 </Page>
+<style>
+  /*View transitions (?)*/
+</style>

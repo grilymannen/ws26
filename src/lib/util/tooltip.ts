@@ -4,7 +4,7 @@ import tippy from 'tippy.js';
 
 import type { Attachment } from 'svelte/attachments';
 
-export function tooltip(content: string): Attachment {
+export function tooltipper(content: string): Attachment {
 	return (element) => {
 		const tooltip = tippy(element, { content, theme: 'light-border' });
 		return tooltip.destroy;

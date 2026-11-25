@@ -6,8 +6,9 @@
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
+	let user = $derived(data.user)
 	let signingup = $state(true);
-	let hasUser = $derived(!!data.user);
+	let hasUser = $derived(!!user);
 
 	const toggle = () => (signingup = !signingup);
 </script>

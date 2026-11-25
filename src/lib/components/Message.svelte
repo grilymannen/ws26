@@ -2,6 +2,7 @@
 	import type { UserData } from '#lib/types.ts';
 	import { EllipsisVertical } from '@lucide/svelte';
 	import Button from './Button.svelte'
+	import User from './User.svelte';
 
 	type Message = {
 		created_at: Temporal.Instant;
@@ -20,17 +21,9 @@
 	const user = $derived(message.user);
 </script>
 
-<article class="flex gap-3 rounded-lg border border-gray-300 p-4">
+<article class="flex gap-3 rounded-lg border border-gray-300 p-4" id={message.id}>
 	{#if !!user}
-		{#if user.avatarurl}
-			<img src={user.avatarurl} alt="{user.name} profile" class="size-10 rounded-full" />
-		{:else}
-			<div
-				class="flex size-10 shrink-0 items-center justify-center rounded-full bg-gray-200 font-semibold text-gray-700"
-			>
-				{user.name.charAt(0).toLocaleUpperCase()}
-			</div>
-		{/if}
+		<User {user} size={10} tooltip={false}/>
 
 		<div class="min-w-0 flex-1">
 			<div class="flex flex-wrap items-center gap-2">
@@ -46,8 +39,16 @@
 				</Button>
 			</div>
 
-			<p class="wrap-break-words mt-2 text-sm whitespace-pre-wrap">
-				{message.text}
+			<p class="wrap-break-words break-all mt-2 text-sm whitespace-pre-wrap">
+			{let isImage = /\.(png|jpe?g|webp|gif)(\?.*)?$/i.test(message.text)}
+			{let isURL = /^https?:\/\/.+/i.test(message.text);}
+			{#if isImage}
+			  <img src={message.text} alt={message.text}>
+			{:else if isURL}
+			  <a href={message.text} target="_blank" class="text-blue-500 underline">{message.text}</a>
+			{:else}
+			  {message.text}
+			{/if}
 			</p>
 		</div>
 	{/if}

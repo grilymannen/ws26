@@ -10,7 +10,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 
-	import { tooltip } from '#lib/util/tooltip.ts';
+	import { tooltipper } from '#lib/util/tooltip.ts';
 	import { logout } from '#lib/logout.ts';
 
 	let { data }: PageProps = $props();
@@ -77,7 +77,7 @@
 					)}
 					{let isCurrent = $derived(session.id === sessiondata.current!)}
 					<div class="flex items-center justify-between">
-						<Button variant="ghost" {@attach tooltip(expired ? 'Expired' : 'Not expired')}>
+						<Button variant="ghost" {@attach tooltipper(expired ? 'Expired' : 'Not expired')}>
 							{#if expired}
 								<ClockFading />
 							{:else}

@@ -5,13 +5,13 @@ import { pdb } from '#lib/prisma/db.ts';
 
 import { resize, upload } from '#lib/util/images.ts';
 import { AUTH_PATH, REFRESH_COOKIE } from '#lib/constants.ts';
-import { stringSchema } from '#lib/schema.ts';
+import { StringSchema } from '#lib/types.ts';
 import { readToken } from '#lib/server/jwt.ts';
 
 export const uploadAvatar = form(
 	v.object({
 		file: v.file(),
-		id: stringSchema
+		id: StringSchema
 	}),
 	async ({ file, id }) => {
 		const user = pdb.User.first({ id });
@@ -24,17 +24,17 @@ export const uploadAvatar = form(
 	}
 );
 
-export const getAllSessions = query(stringSchema, async (userid) => {
+export const getAllSessions = query(StringSchema, async (userid) => {
 	let { cookies } = getRequestEvent();
 	const current = await readToken<string>(cookies.get(REFRESH_COOKIE));
 	const all = await pdb.RefreshToken.where({ userid }).all();
 	return { all, current };
 });
 
-export const deleteAllSessions = command(stringSchema, async (userid) => {
+export const deleteAllSessions = command(StringSchema, async (userid) => {
 	await pdb.RefreshToken.where({ userid }).deleteAll();
 });
 
-export const deleteSession = command(stringSchema, async (id) => {
+export const deleteSession = command(StringSchema, async (id) => {
 	await pdb.RefreshToken.where({ id }).delete();
 });

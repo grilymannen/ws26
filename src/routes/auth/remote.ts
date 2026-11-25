@@ -1,6 +1,6 @@
 import { form, getRequestEvent } from '$app/server';
 import { pdb } from '#lib/prisma/db.ts';
-import { authSchema } from '#lib/schema.ts';
+import { AuthSchema } from '#lib/types.ts';
 import { hashPassword, verifyPassword } from '#lib/server/password.ts';
 import {
 	ACCESS_COOKIE,
@@ -15,7 +15,7 @@ import type { AccessCookieData } from '#lib/types.ts';
 
 const seconds = REFRESH_TTL_S;
 
-export const signup = form(authSchema, async ({ name, pass }) => {
+export const signup = form(AuthSchema, async ({ name, pass }) => {
 	const existingUser = await pdb.User.first({ name });
 
 	if (existingUser) {
@@ -34,7 +34,7 @@ export const signup = form(authSchema, async ({ name, pass }) => {
 	redirect(303, '/app');
 });
 
-export const login = form(authSchema, async ({ name, pass }) => {
+export const login = form(AuthSchema, async ({ name, pass }) => {
 	const fail = { success: false, message: `User '${name}' does not exist with those credentials` };
 	const user = await pdb.User.first({ name });
 
