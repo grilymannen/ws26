@@ -3,12 +3,12 @@
 
 	import type { LayoutProps } from './$types';
 	import { tooltipper } from '#lib/util/tooltip.ts';
+	import { Page, Button, User } from '#lib/components.ts';
 
-	import { Page, Button } from '#lib/components.ts';
-	import { House, Lock, LogOut, MessageCircle, User } from '@lucide/svelte';
+	import { House, Lock, LogOut, MessageCircle, User as UserIcon } from '@lucide/svelte';
 	import { logout } from '#lib/logout.ts';
 
-	let { children, data, params }: LayoutProps = $props();
+	let { children, data }: LayoutProps = $props();
 	let user = $derived(data.user);
 </script>
 
@@ -30,12 +30,11 @@
 	</a>
 	<a href="/account">
 		<Button variant="secondary" {@attach tooltipper('Account')}>
-			<User />
+			<UserIcon />
 			{#if user}
-				Logged in as: <span class="font-semibold">{user.name}</span><img
-					class="size-6 rounded-full"
-					src={user?.avatarurl}
-					alt={user.name}
+				Logged in as: <span class="max-w-sm truncate font-semibold">{user.name}</span><User
+					{user}
+					size={6}
 				/>
 			{:else}
 				Not logged in
@@ -49,6 +48,7 @@
 <Page>
 	{@render children()}
 </Page>
+
 <style>
-  /*View transitions (?)*/
+	/*View transitions (?)*/
 </style>

@@ -37,7 +37,9 @@
 </script>
 
 <Card>
-	<h1 class="text-xl font-semibold">Your account: <span class="font-bold">{user!.name}</span></h1>
+	<h1 class="truncate text-xl font-semibold">
+		Your account: <span class="font-bold">{user!.name}</span>
+	</h1>
 	<div class="flex gap-4">
 		<div class="flex w-sm flex-col gap-2 border-r border-gray-300 p-4">
 			{#each categories as { text, Icon }}
@@ -85,7 +87,10 @@
 							{/if}
 						</Button>
 						<p>
-							{i + 1}. <span class:text-gray-500={expired}>{session.expires}</span>
+							{i + 1}.
+							<span class:text-gray-500={expired}
+								>{session.expires} {isCurrent ? '(CURRENT)' : ''}</span
+							>
 						</p>
 						<Button
 							variant="outline"

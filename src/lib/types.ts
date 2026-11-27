@@ -1,4 +1,4 @@
-import * as v from 'valibot'
+import * as v from 'valibot';
 
 export type AccessCookieData = {
 	id: string;
@@ -14,10 +14,14 @@ export type UserData = {
 	avatarurl: string | null;
 };
 
-export const SortMethodSchema = v.picklist(['top', 'recent', 'old'])
+export const SortMethodSchema = v.picklist(['top', 'recent', 'old']);
 
 export type SortMethod = v.InferOutput<typeof SortMethodSchema>;
 
-
-export const StringSchema = v.pipe(v.string(), v.trim(), v.minLength(3, "Must be at least 3 characters"));
+export const StringSchema = v.pipe(
+	v.string(),
+	v.trim(),
+	v.minLength(3, 'Must be at least 3 characters'),
+	v.maxLength(64, 'Too long! Input must be under 64 characters')
+);
 export const AuthSchema = v.object({ name: StringSchema, pass: StringSchema });

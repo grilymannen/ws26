@@ -11,14 +11,14 @@
 
 <Card>
 	{#if forum}
-		<h1 class="text-xl font-semibold">{forum.text}</h1>
+		<h1 class="overflow-x-hidden text-xl font-semibold wrap-break-word">{forum.text}</h1>
 		<p>ID: <span class="text-gray-600">{params.id}</span></p>
 		<p>Created at {forum.created_at} by {forum.user!.name}</p>
-		<div class="flex items-center mt-4">
-			<span class="mr-1">Participants: {participants.length}</span> 
+		<div class="mt-4 flex items-center">
+			<span class="mr-1">Participants: {participants.length}</span>
 			{#each participants as user}
 				{#if user}
-					<User {user} size={8} tooltip={true} multi={true}/>
+					<User {user} size={8} tooltip={true} multi={true} />
 				{/if}
 			{/each}
 		</div>

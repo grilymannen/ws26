@@ -1,5 +1,4 @@
-import EventEmitter from "node:events";
+import EventEmitter from 'node:events';
 
-export const appEmitter = new EventEmitter()
-appEmitter.setMaxListeners(0)
-
+export const appEmitter = new EventEmitter();
+appEmitter.setMaxListeners(0);
